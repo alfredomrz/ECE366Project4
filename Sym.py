@@ -136,7 +136,12 @@ def simulate(Instruction,InstructionHex,debugMode):
             Register[int(fetch[11:16],2)] = Memory[imm + Register[int(fetch[6:11],2)] - 8192] # Load memory into register
 
             tmpFetch = Instruction[PC+1]
-            if(int(fetch[11:16], 2) == )
+            if((tmpFetch[0:6] == '000000' and tmpFetch[26:32] == '100000') or   #If next instruction is R type
+                (tmpFetch[0:6] == '000000' and tmpFetch[26:32] == '100010') or        #sub
+                (tmpFetch[0:6] == '000000' and tmpFetch[26:32] == '101010')):
+
+                if(int(fetch[6:11],2) == int(tmpFetch[11:15],2) or int(fetch[6:11],2)== int(tmpFetch[11:16]))
+                
  
     print("***Finished simulation***")
     print("Total # of cycles: " + str(Cycle))
