@@ -134,13 +134,16 @@ def simulate(Instruction,InstructionHex,debugMode):
             Cycle += 5
             fiveCycles += 1
             Register[int(fetch[11:16],2)] = Memory[imm + Register[int(fetch[6:11],2)] - 8192] # Load memory into register
-
-            tmpFetch = Instruction[PC+1]
+            #LW USE Hazard. If the next instruction uses lw -> stall by once cycle
+            tmpFetch = Instruction[PC]
             if((tmpFetch[0:6] == '000000' and tmpFetch[26:32] == '100000') or   #If next instruction is R type
                 (tmpFetch[0:6] == '000000' and tmpFetch[26:32] == '100010') or        #sub
-                (tmpFetch[0:6] == '000000' and tmpFetch[26:32] == '101010')):
+                (tmpFetch[0:6] == '000000' and tmpFetch[26:32] == '101010')):         #SLT
 
-                if(int(fetch[6:11],2) == int(tmpFetch[11:15],2) or int(fetch[6:11],2)== int(tmpFetch[11:16]))
+                if(int(fetch[11:16],2)== int(tmpFetch[6:11]) or int(fetch[11:16],2)== int(tmpFetch[11:16])):
+                    print("LW Use Hazard Dected Stall 1")
+                    pipelineCycles +=1
+
                 
  
     print("***Finished simulation***")
